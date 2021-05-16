@@ -1,0 +1,314 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row flex-row-reverse">
+      <div class="col-12 col-md-8 col-sm-12">
+        <div class="card">
+          <div class="card-header card-header-warning text-end">
+            <h2 class="card-title">املأ الاستمارة</h2>
+            <p class="card-category ">
+              للحصول على إحصاءات الطاقة الشمسية الخاصة بك فورا
+            </p>
+          </div>
+          <div class="card-body">
+            <form #dpForm="ngForm" (ngSubmit)="createDataPoint(dpForm)">
+              <div class="row flex-row-reverse">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">flag</i>
+                      </div>
+                      <p class="card-category">البلد</p>
+                    </div>
+                    <div class="card-body ">
+                      <mat-form-field>
+                        <mat-select
+                          required
+                          ngModel="countryId"
+                          name="country"
+                          class="text-end"
+                        >
+                          <mat-option
+                            class="text-end"
+                            *ngFor="let country of countries"
+                            [value]="country.id"
+                          >
+                            {{ country.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">location_city</i>
+                      </div>
+                      <p class="card-category">الولاية</p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field>
+                        <mat-select
+                          required
+                          ngModel="stateId"
+                          name="state"
+                          class="text-end"
+                        >
+                          <mat-option
+                            class="text-end"
+                            *ngFor="let state of states"
+                            [value]="state.id"
+                          >
+                            {{ state.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">location_on</i>
+                      </div>
+                      <p class="card-category">المدينة</p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field>
+                        <mat-select
+                          class="text-end"
+                          required
+                          ngModel="cityId"
+                          name="city"
+                        >
+                          <mat-option
+                            class="text-end"
+                            *ngFor="let city of cities"
+                            [value]="city.id"
+                          >
+                            {{ city.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row-reverse row">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">electrical_services</i>
+                      </div>
+                      <p class="card-category">
+                        فواتير الكهرباء لمدة سنة واحدة
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field class="text-end">
+                        <mat-label>الفاتورة الأولى (القيمة بالدينار)</mat-label>
+                        <input required ngModel name="bill1" matInput />
+                      </mat-form-field>
+                      <mat-form-field class="text-end">
+                        <mat-label
+                          >الفاتورة الثانية (القيمة بالدينار)</mat-label
+                        >
+                        <input required ngModel name="bill2" matInput />
+                      </mat-form-field>
+                      <mat-form-field class="text-end">
+                        <mat-label
+                          >الفاتورة الثالثة (القيمة بالدينار)</mat-label
+                        >
+                        <input required ngModel name="bill3" matInput />
+                      </mat-form-field>
+                      <mat-form-field class="text-end">
+                        <mat-label
+                          >الفاتورة الرابعة (القيمة بالدينار)</mat-label
+                        >
+                        <input required ngModel name="bill4" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">home</i>
+                      </div>
+                      <p class="card-category">
+                        ما هي مساحة سطح منزلك التي ستحجزها للألواح الشمسية؟
+                        (بالمتر المربع)
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field class="text-end">
+                        <mat-label>المساحة (بالمتر المربع)</mat-label>
+                        <input required ngModel name="area" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">textsms</i>
+                      </div>
+                      <p class="card-category">
+                        هل تريد منا أن نرسل لك تقرير الطاقة الشمسية عبر رسالة
+                        نصية؟
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-checkbox
+                        id="phone-checkbox"
+                        (change)="onCheckboxChange($event)"
+                        >نعم</mat-checkbox
+                      >
+                      <div *ngIf="phoneInputShow">
+                        <mat-form-field class="text-end">
+                          <mat-label>رقم تليفونك</mat-label>
+                          <input required ngModel name="phone" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">alternate_email</i>
+                      </div>
+                      <p class="card-category">
+                        هل تريد منا أن نرسل لك تقرير الطاقة الشمسية عبر البريد
+                        إلكتروني؟
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-checkbox
+                        id="email-checkbox"
+                        (change)="onCheckboxChange($event)"
+                        >نعم</mat-checkbox
+                      >
+                      <div *ngIf="emailInputShow">
+                        <mat-form-field class="text-end">
+                          <mat-label>بريدك الالكتروني</mat-label>
+                          <input required ngModel name="email" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                mat-raised-button
+                type="submit"
+                class="btn btn-success pull-left"
+              >
+                إرسال
+              </button>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4 col-sm-12">
+        <div *ngIf="spinner" class="overlay">
+          <div class="center">
+            <mat-spinner color="accent"></mat-spinner>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header card-header-danger text-end">
+            <h2 class="card-title">معدل استهلاكك اليومي للطاقة</h2>
+            <h1 class="card-category ">
+              بالدينار
+            </h1>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">attach_money</i>
+                    </div>
+                    <h1 class="card-category">
+                      {{ consumption }}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header card-header-danger text-end">
+            <h2 class="card-title">أنت تستهلك في يوم واحد من الكهرباء معدل</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">electrical_services</i>
+                    </div>
+                    <h1 class="card-category">
+                      {{ use }}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header card-header-success text-end">
+            <h2 class="card-title">
+              في حالة استخدامك للطاقة الشمسية ، كنت ستكسب اليوم
+            </h2>
+            <h2 class="card-category ">
+              بالدينار
+            </h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                      <i class="material-icons">attach_money</i>
+                    </div>
+                    <h1 class="card-category">
+                      {{ gain }}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

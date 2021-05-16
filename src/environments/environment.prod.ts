@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  rootURL: 'https://icarus-v0-server.herokuapp.com/api/v1'
 };
