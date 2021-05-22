@@ -345,6 +345,7 @@ export class UserComponent implements OnInit {
       this.emailInputShow = e.checked;
     }
   }
+
   createDataPoint(dpForm: any) {
     if (dpForm.form.status === 'VALID') {
       this.spinner = true;
@@ -362,20 +363,39 @@ export class UserComponent implements OnInit {
         dpForm.form.value.period
       );
       this.service.createDataPoint(dataPoint).subscribe(response => {
-        console.log(JSON.parse(JSON.stringify(response)).billAmount);
         this.spinner = false;
-        this.consumption = (
-          JSON.parse(JSON.stringify(response)).billAmount / 365
-        )
-          .toFixed(2)
-          .toString();
-        this.use = `${(
-          JSON.parse(JSON.stringify(response)).billAmount /
-          365 /
-          0.21
-        )
-          .toFixed(2)
-          .toString()} kw`;
+
+        let today = new Date();
+        let summerSatrt = new Date(`01/05/${today.getFullYear}`);
+        let summerFinish = new Date(`30/09/${today.getFullYear}`);
+
+        if (today > summerSatrt && today < summerFinish) {
+          this.consumption = (
+            (JSON.parse(JSON.stringify(response)).billAmount / 365) *
+            1.5
+          )
+            .toFixed(2)
+            .toString();
+          this.use = `${(
+            ((JSON.parse(JSON.stringify(response)).billAmount / 365) * 1.5) /
+            0.21
+          )
+            .toFixed(2)
+            .toString()} kw/J`;
+        } else {
+          this.consumption = (
+            JSON.parse(JSON.stringify(response)).billAmount / 365
+          )
+            .toFixed(2)
+            .toString();
+          this.use = `${(
+            JSON.parse(JSON.stringify(response)).billAmount /
+            365 /
+            0.21
+          )
+            .toFixed(2)
+            .toString()} kw/J`;
+        }
 
         if (JSON.parse(JSON.stringify(response)).energy !== 0.0) {
           this.gain = (JSON.parse(JSON.stringify(response)).energy * 0.21)
