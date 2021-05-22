@@ -364,7 +364,7 @@ export class UserComponent implements OnInit {
       );
       this.service.createDataPoint(dataPoint).subscribe(response => {
         this.spinner = false;
-
+        dpForm.reset();
         let today = new Date();
         let summerSatrt = new Date(`01/05/${today.getFullYear}`);
         let summerFinish = new Date(`30/09/${today.getFullYear}`);
