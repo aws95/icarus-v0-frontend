@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataPointService } from '../services/data-point.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Country {
   name: string;
@@ -8,10 +9,12 @@ interface Country {
 interface State {
   name: string;
   id: string;
+  countryId:string
 }
 interface City {
   name: string;
   id: string;
+  stateID: string;
 }
 export class DataPoint {
   constructor(
@@ -36,307 +39,320 @@ export class DataPoint {
 export class UserComponent implements OnInit {
   countries: Country[] = [{ name: 'Tunisie', id: '217' }];
   states: State[] = [
-    { id: '1', name: 'Tunis' },
-    { id: '2', name: 'Sfax' },
-    { id: '3', name: 'Sousse' },
-    { id: '4', name: 'Gabes' },
-    { id: '5', name: 'Kairouan' },
-    { id: '6', name: 'Bizerte' },
-    { id: '7', name: 'Gafsa' },
-    { id: '8', name: 'Nabeul' },
-    { id: '9', name: 'Ariana' },
-    { id: '10', name: 'Kasserine' },
-    { id: '11', name: 'Monastir' },
-    { id: '12', name: 'Tataouine' },
-    { id: '13', name: 'Medenine' },
-    { id: '14', name: 'Beja' },
-    { id: '15', name: 'Jendouba' },
-    { id: '16', name: 'El Kef' },
-    { id: '17', name: 'Mahdia' },
-    { id: '18', name: 'Sidi Bouzid' },
-    { id: '19', name: 'Tozeur' },
-    { id: '20', name: 'Siliana' },
-    { id: '21', name: 'Kebili' },
-    { id: '22', name: 'Zaghouan' },
-    { id: '23', name: 'Ben Arous' },
-    { id: '24', name: 'Manouba' }
+    { id: '1', name: 'Tunis',countryId:"217" },
+    { id: '15', name: 'Sfax' ,countryId:"217"},
+    { id: '12', name: 'Sousse' ,countryId:"217"},
+    { id: '19', name: 'Gabes' ,countryId:"217"},
+    { id: '16', name: 'Kairouan',countryId:"217" },
+    { id: '7', name: 'Bizerte',countryId:"217" },
+    { id: '22', name: 'Gafsa' ,countryId:"217"},
+    { id: '5', name: 'Nabeul' ,countryId:"217"},
+    { id: '2', name: 'Ariana' ,countryId:"217"},
+    { id: '17', name: 'Kasserine' ,countryId:"217"},
+    { id: '13', name: 'Monastir',countryId:"217" },
+    { id: '21', name: 'Tataouine',countryId:"217" },
+    { id: '20', name: 'Medenine',countryId:"217" },
+    { id: '8', name: 'Beja' ,countryId:"217"},
+    { id: '9', name: 'Jendouba',countryId:"217" },
+    { id: '10', name: 'El Kef' ,countryId:"217"},
+    { id: '14', name: 'Mahdia' ,countryId:"217"},
+    { id: '18', name: 'Sidi Bouzid',countryId:"217" },
+    { id: '23', name: 'Tozeur',countryId:"217" },
+    { id: '11', name: 'Siliana' ,countryId:"217"},
+    { id: '24', name: 'Kebili',countryId:"217" },
+    { id: '6', name: 'Zaghouan',countryId:"217" },
+    { id: '3', name: 'Ben Arous' ,countryId:"217"},
+    { id: '4', name: 'Manouba' ,countryId:"217"}
   ];
   cities: City[] = [
-    { id: '1111', name: 'Tunis' },
-    { id: '1112', name: 'Le Bardo' },
-    { id: '1113', name: 'Le Kram' },
-    { id: '1114', name: 'La Goulette' },
-    { id: '1115', name: 'Carthage' },
-    { id: '1116', name: 'Sidi Bou Said' },
-    { id: '1117', name: 'La Marsa' },
-    { id: '1118', name: 'Sidi Hassine' },
-    { id: '1211', name: 'Ariana' },
-    { id: '1212', name: 'La Soukra' },
-    { id: '1213', name: 'Raoued' },
-    { id: '1214', name: 'Kalâat el-Andalous' },
-    { id: '1215', name: 'Sidi Thabet' },
-    { id: '1216', name: 'Ettadhamen-Mnihla' },
-    { id: '1311', name: 'Ben Arous' },
-    { id: '1312', name: 'El Mourouj' },
-    { id: '1313', name: 'Hammam Lif' },
-    { id: '1314', name: 'Hammam Chott' },
-    { id: '1315', name: 'Bou Mhel el-Bassatine' },
-    { id: '1316', name: 'Ezzahra' },
-    { id: '1317', name: 'Radès' },
-    { id: '1318', name: 'Mégrine' },
-    { id: '1319', name: 'Mohamedia-Fouchana' },
-    { id: '1320', name: 'Mornag' },
-    { id: '1321', name: 'Khalidia' },
-    { id: '1411', name: 'Manouba' },
-    { id: '1412', name: 'Den Den' },
-    { id: '1413', name: 'Douar Hicher' },
-    { id: '1414', name: 'Oued Ellil' },
-    { id: '1415', name: 'Mornaguia' },
-    { id: '1416', name: 'Borj El Amri' },
-    { id: '1417', name: 'Djedeida' },
-    { id: '1418', name: 'Tebourba' },
-    { id: '1419', name: 'El Battan' },
-    { id: '1511', name: 'Nabeul' },
-    { id: '1512', name: 'Dar Chaabane' },
-    { id: '1513', name: 'Béni Khiar' },
-    { id: '1514', name: 'El Maâmoura' },
-    { id: '1515', name: 'Somâa' },
-    { id: '1516', name: 'Korba' },
-    { id: '1517', name: 'Tazerka' },
-    { id: '1518', name: 'Menzel Temime' },
-    { id: '1519', name: 'Menzel Horr' },
-    { id: '1520', name: 'El Mida' },
-    { id: '1521', name: 'Kelibia' },
-    { id: '1522', name: 'Azmour' },
-    { id: '1523', name: 'Hammam Ghezèze' },
-    { id: '1524', name: 'Dar Allouch' },
-    { id: '1525', name: 'El Haouaria' },
-    { id: '1526', name: 'Takelsa' },
-    { id: '1527', name: 'Soliman' },
-    { id: '1528', name: 'Korbous' },
-    { id: '1529', name: 'Menzel Bouzelfa' },
-    { id: '1530', name: 'Béni Khalled' },
-    { id: '1531', name: 'Zaouiet Djedidi' },
-    { id: '1532', name: 'Grombalia' },
-    { id: '1533', name: 'Bou Argoub' },
-    { id: '1534', name: 'Hammamet' },
-    { id: '1611', name: 'Zaghouan' },
-    { id: '1612', name: 'Zriba' },
-    { id: '1613', name: 'Bir Mcherga' },
-    { id: '1614', name: 'Djebel Oust' },
-    { id: '1615', name: 'El Fahs' },
-    { id: '1616', name: 'Nadhour' },
-    { id: '1711', name: 'Bizerte' },
-    { id: '1712', name: 'Sejnane' },
-    { id: '1713', name: 'Mateur' },
-    { id: '1714', name: 'Menzel Bourguiba' },
-    { id: '1715', name: 'Tinja' },
-    { id: '1716', name: 'Ghar al Milh' },
-    { id: '1717', name: 'Aousja' },
-    { id: '1718', name: 'Menzel Jemil' },
-    { id: '1719', name: 'Menzel Abderrahmane' },
-    { id: '1720', name: 'El Alia' },
-    { id: '1721', name: 'Ras Jebel' },
-    { id: '1722', name: 'Metline' },
-    { id: '1723', name: 'Raf Raf' },
-    { id: '2111', name: 'Béja' },
-    { id: '2112', name: 'El Maâgoula' },
-    { id: '2113', name: 'Zahret Medien' },
-    { id: '2114', name: 'Nefza' },
-    { id: '2115', name: 'Téboursouk' },
-    { id: '2116', name: 'Testour' },
-    { id: '2117', name: 'Goubellat' },
-    { id: '2118', name: 'Majaz al Bab' },
-    { id: '2211', name: 'Jendouba' },
-    { id: '2212', name: 'Bou Salem' },
-    { id: '2213', name: 'Tabarka' },
-    { id: '2214', name: 'Aïn Draham' },
-    { id: '2215', name: 'Fernana' },
-    { id: '2216', name: "Beni M'Tir" },
-    { id: '2217', name: 'Ghardimaou' },
-    { id: '2218', name: 'Oued Melliz' },
-    { id: '2311', name: 'El Kef' },
-    { id: '2312', name: 'Nebeur' },
-    { id: '2313', name: 'Touiref' },
-    { id: '2314', name: 'Sakiet Sidi Youssef' },
-    { id: '2315', name: 'Tajerouine' },
-    { id: '2316', name: 'Menzel Salem' },
-    { id: '2317', name: 'Kalaat es Senam' },
-    { id: '2318', name: 'Kalâat Khasba' },
-    { id: '2319', name: 'Jérissa' },
-    { id: '2320', name: 'El Ksour' },
-    { id: '2321', name: 'Dahmani' },
-    { id: '2322', name: 'Sers' },
-    { id: '2411', name: 'Siliana' },
-    { id: '2412', name: 'Bou Arada' },
-    { id: '2413', name: 'Gaâfour' },
-    { id: '2414', name: 'El Krib' },
-    { id: '2415', name: 'Sidi Bou Rouis' },
-    { id: '2416', name: 'Maktar' },
-    { id: '2417', name: 'Rouhia' },
-    { id: '2418', name: 'Kesra' },
-    { id: '2419', name: 'Bargou' },
-    { id: '2420', name: 'El Aroussa' },
-    { id: '3111', name: 'Sousse' },
-    { id: '3112', name: 'Ksibet Thrayet' },
-    { id: '3113', name: 'Ezzouhour' },
-    { id: '3114', name: 'Zaouiet Sousse' },
-    { id: '3115', name: 'Hammam Sousse' },
-    { id: '3116', name: 'Akouda' },
-    { id: '3117', name: 'Kalâa Kebira' },
-    { id: '3118', name: 'Sidi Bou Ali' },
-    { id: '3119', name: 'Hergla' },
-    { id: '3120', name: 'Enfidha' },
-    { id: '3121', name: 'Bouficha' },
-    { id: '3122', name: 'Sidi El Hani' },
-    { id: '3123', name: "M'saken" },
-    { id: '3124', name: 'Kalâa Seghira' },
-    { id: '3125', name: 'Messaadine' },
-    { id: '3126', name: 'Kondar' },
-    { id: '3211', name: 'Monastir' },
-    { id: '3212', name: 'Khniss' },
-    { id: '3213', name: 'Ouerdanin' },
-    { id: '3214', name: 'Sahline Moôtmar' },
-    { id: '3215', name: 'Sidi Ameur' },
-    { id: '3216', name: 'Zéramdine' },
-    { id: '3217', name: 'Beni Hassen' },
-    { id: '3218', name: 'Ghenada' },
-    { id: '3219', name: 'Jemmal' },
-    { id: '3220', name: 'Menzel Kamel' },
-    { id: '3221', name: 'Zaouiet Kontoch' },
-    { id: '3222', name: 'Bembla-Mnara' },
-    { id: '3223', name: 'Menzel Ennour' },
-    { id: '3224', name: 'El Masdour' },
-    { id: '3225', name: 'Moknine' },
-    { id: '3226', name: 'Sidi Bennour' },
-    { id: '3227', name: 'Menzel Farsi' },
-    { id: '3228', name: 'Amiret El Fhoul' },
-    { id: '3229', name: 'Amiret Touazra' },
-    { id: '3230', name: 'Amiret El Hojjaj' },
-    { id: '3231', name: 'Cherahil' },
-    { id: '3232', name: 'Bekalta' },
-    { id: '3233', name: 'Téboulba' },
-    { id: '3234', name: 'Ksar Hellal' },
-    { id: '3235', name: 'Ksibet El Mediouni' },
-    { id: '3236', name: 'Benen Bodher' },
-    { id: '3237', name: 'Touza' },
-    { id: '3238', name: 'Sayada' },
-    { id: '3239', name: 'Lemta' },
-    { id: '3240', name: 'Bouhjar' },
-    { id: '3241', name: 'Menzel Hayet' },
-    { id: '3311', name: 'Mahdia' },
-    { id: '3312', name: 'Rejiche' },
-    { id: '3313', name: 'Bou Merdes' },
-    { id: '3314', name: 'Ouled Chamekh' },
-    { id: '3315', name: 'Chorbane' },
-    { id: '3316', name: 'Hebira' },
-    { id: '3317', name: 'Essouassi' },
-    { id: '3318', name: 'El Djem' },
-    { id: '3319', name: 'Kerker' },
-    { id: '3320', name: 'Chebba' },
-    { id: '3321', name: 'Melloulèche' },
-    { id: '3322', name: 'Sidi Alouane' },
-    { id: '3323', name: 'Ksour Essef' },
-    { id: '3324', name: 'El Bradâa' },
-    { id: '3411', name: 'Sfax' },
-    { id: '3412', name: 'Sakiet Ezzit' },
-    { id: '3413', name: 'Chihia' },
-    { id: '3414', name: 'Sakiet Eddaïer' },
-    { id: '3415', name: 'Gremda' },
-    { id: '3416', name: 'El Ain' },
-    { id: '3417', name: 'Thyna' },
-    { id: '3418', name: 'Agareb' },
-    { id: '3419', name: 'Jebiniana' },
-    { id: '3420', name: 'El Hencha' },
-    { id: '3421', name: 'Menzel Chaker' },
-    { id: '3422', name: 'Ghraïba, Tunisia' },
-    { id: '3423', name: 'Bir Ali Ben Khélifa' },
-    { id: '3424', name: 'Skhira' },
-    { id: '3425', name: 'Mahares' },
-    { id: '3426', name: 'Kerkennah' },
-    { id: '4111', name: 'Kairouan' },
-    { id: '4112', name: 'Chebika' },
-    { id: '4113', name: 'Sbikha' },
-    { id: '4114', name: 'Oueslatia' },
-    { id: '4115', name: 'Aïn Djeloula' },
-    { id: '4116', name: 'Haffouz' },
-    { id: '4117', name: 'Alaâ' },
-    { id: '4118', name: 'Hajeb El Ayoun' },
-    { id: '4119', name: 'Nasrallah' },
-    { id: '4120', name: 'Menzel Mehiri' },
-    { id: '4121', name: 'Echrarda' },
-    { id: '4122', name: 'Bou Hajla' },
-    { id: '4211', name: 'Kasserine' },
-    { id: '4212', name: 'Sbeitla' },
-    { id: '4213', name: 'Sbiba' },
-    { id: '4214', name: 'Jedelienne' },
-    { id: '4215', name: 'Thala' },
-    { id: '4216', name: 'Haïdra' },
-    { id: '4217', name: 'Foussana' },
-    { id: '4218', name: 'Fériana' },
-    { id: '4219', name: 'Thélepte' },
-    { id: '4220', name: 'Magel Bel Abbès' },
-    { id: '4311', name: 'Sidi Bouzid' },
-    { id: '4312', name: 'Jilma' },
-    { id: '4313', name: 'Cebalet' },
-    { id: '4314', name: 'Bir El Hafey' },
-    { id: '4315', name: 'Sidi Ali Ben Aoun' },
-    { id: '4316', name: 'Menzel Bouzaiane' },
-    { id: '4317', name: 'Meknassy' },
-    { id: '4318', name: 'Mezzouna' },
-    { id: '4319', name: 'Regueb' },
-    { id: '4320', name: 'Ouled Haffouz' },
-    { id: '5111', name: 'Gabès' },
-    { id: '5112', name: 'Chenini Nahal' },
-    { id: '5113', name: 'Ghannouch' },
-    { id: '5114', name: 'Métouia' },
-    { id: '5115', name: 'Oudhref' },
-    { id: '5116', name: 'El Hamma' },
-    { id: '5117', name: 'Matmata' },
-    { id: '5118', name: 'Nouvelle Matmata' },
-    { id: '5119', name: 'Mareth' },
-    { id: '5120', name: 'Zarat' },
-    { id: '5211', name: 'Medenine' },
-    { id: '5212', name: 'Beni Khedache' },
-    { id: '5213', name: 'Ben Gardane' },
-    { id: '5214', name: 'Zarzis' },
-    { id: '5215', name: 'Houmt El Souk (Djerba)' },
-    { id: '5216', name: 'Midoun (Djerba)' },
-    { id: '5217', name: 'Ajim (Djerba)' },
-    { id: '5311', name: 'Tataouine' },
-    { id: '5312', name: 'Bir Lahmar' },
-    { id: '5313', name: 'Ghomrassen' },
-    { id: '5314', name: 'Dehiba' },
-    { id: '5315', name: 'Remada' },
-    { id: '6111', name: 'Gafsa' },
-    { id: '6112', name: 'El Ksar' },
-    { id: '6113', name: 'Moularès' },
-    { id: '6114', name: 'Redeyef' },
-    { id: '6115', name: 'Métlaoui' },
-    { id: '6116', name: 'Mdhila' },
-    { id: '6117', name: 'El Guettar' },
-    { id: '6118', name: 'Sened' },
-    { id: '6211', name: 'Tozeur' },
-    { id: '6212', name: 'Degache' },
-    { id: '6213', name: 'Hamet Jerid' },
-    { id: '6214', name: 'Nafta' },
-    { id: '6215', name: 'Tamerza' },
-    { id: '6311', name: 'Kebili' },
-    { id: '6312', name: 'Djemna' },
-    { id: '6313', name: 'Douz' },
-    { id: '6314', name: 'El Golâa' },
-    { id: '6315', name: 'Souk Lahad' }
+    { id: '1111', name: 'Tunis', stateID: '1' },
+    { id: '1112', name: 'Le Bardo', stateID: '1' },
+    { id: '1113', name: 'Le Kram', stateID: '1' },
+    { id: '1114', name: 'La Goulette', stateID: '1' },
+    { id: '1115', name: 'Carthage', stateID: '1' },
+    { id: '1116', name: 'Sidi Bou Said', stateID: '1' },
+    { id: '1117', name: 'La Marsa', stateID: '1' },
+    { id: '1118', name: 'Sidi Hassine', stateID: '1' },
+    { id: '1211', name: 'Ariana', stateID: '2' },
+    { id: '1212', name: 'La Soukra', stateID: '2' },
+    { id: '1213', name: 'Raoued', stateID: '2' },
+    { id: '1214', name: 'Kalâat el-Andalous', stateID: '2' },
+    { id: '1215', name: 'Sidi Thabet', stateID: '2' },
+    { id: '1216', name: 'Ettadhamen-Mnihla', stateID: '2' },
+    { id: '1311', name: 'Ben Arous', stateID: '3' },
+    { id: '1312', name: 'El Mourouj', stateID: '3' },
+    { id: '1313', name: 'Hammam Lif', stateID: '3' },
+    { id: '1314', name: 'Hammam Chott', stateID: '3' },
+    { id: '1315', name: 'Bou Mhel el-Bassatine', stateID: '3' },
+    { id: '1316', name: 'Ezzahra', stateID: '3' },
+    { id: '1317', name: 'Radès', stateID: '3' },
+    { id: '1318', name: 'Mégrine', stateID: '3' },
+    { id: '1319', name: 'Mohamedia-Fouchana', stateID: '3' },
+    { id: '1320', name: 'Mornag', stateID: '3' },
+    { id: '1321', name: 'Khalidia', stateID: '3' },
+    { id: '1411', name: 'Manouba', stateID: '4' },
+    { id: '1412', name: 'Den Den', stateID: '4' },
+    { id: '1413', name: 'Douar Hicher', stateID: '4' },
+    { id: '1414', name: 'Oued Ellil', stateID: '4' },
+    { id: '1415', name: 'Mornaguia', stateID: '4' },
+    { id: '1416', name: 'Borj El Amri', stateID: '4' },
+    { id: '1417', name: 'Djedeida', stateID: '4' },
+    { id: '1418', name: 'Tebourba', stateID: '4' },
+    { id: '1419', name: 'El Battan', stateID: '4' },
+    { id: '1511', name: 'Nabeul', stateID: '5' },
+    { id: '1512', name: 'Dar Chaabane', stateID: '5' },
+    { id: '1513', name: 'Béni Khiar', stateID: '5' },
+    { id: '1514', name: 'El Maâmoura', stateID: '5' },
+    { id: '1515', name: 'Somâa', stateID: '5' },
+    { id: '1516', name: 'Korba', stateID: '5' },
+    { id: '1517', name: 'Tazerka', stateID: '5' },
+    { id: '1518', name: 'Menzel Temime', stateID: '5' },
+    { id: '1519', name: 'Menzel Horr', stateID: '5' },
+    { id: '1520', name: 'El Mida', stateID: '5' },
+    { id: '1521', name: 'Kelibia', stateID: '5' },
+    { id: '1522', name: 'Azmour', stateID: '5' },
+    { id: '1523', name: 'Hammam Ghezèze', stateID: '5' },
+    { id: '1524', name: 'Dar Allouch', stateID: '5' },
+    { id: '1525', name: 'El Haouaria', stateID: '5' },
+    { id: '1526', name: 'Takelsa', stateID: '5' },
+    { id: '1527', name: 'Soliman', stateID: '5' },
+    { id: '1528', name: 'Korbous', stateID: '5' },
+    { id: '1529', name: 'Menzel Bouzelfa', stateID: '5' },
+    { id: '1530', name: 'Béni Khalled', stateID: '5' },
+    { id: '1531', name: 'Zaouiet Djedidi', stateID: '5' },
+    { id: '1532', name: 'Grombalia', stateID: '5' },
+    { id: '1533', name: 'Bou Argoub', stateID: '5' },
+    { id: '1534', name: 'Hammamet', stateID: '5' },
+    { id: '1611', name: 'Zaghouan', stateID: '6' },
+    { id: '1612', name: 'Zriba', stateID: '6' },
+    { id: '1613', name: 'Bir Mcherga', stateID: '6' },
+    { id: '1614', name: 'Djebel Oust', stateID: '6' },
+    { id: '1615', name: 'El Fahs', stateID: '6' },
+    { id: '1616', name: 'Nadhour', stateID: '6' },
+    { id: '1711', name: 'Bizerte', stateID: '7' },
+    { id: '1712', name: 'Sejnane', stateID: '7' },
+    { id: '1713', name: 'Mateur', stateID: '7' },
+    { id: '1714', name: 'Menzel Bourguiba', stateID: '7' },
+    { id: '1715', name: 'Tinja', stateID: '7' },
+    { id: '1716', name: 'Ghar al Milh', stateID: '7' },
+    { id: '1717', name: 'Aousja', stateID: '7' },
+    { id: '1718', name: 'Menzel Jemil', stateID: '7' },
+    { id: '1719', name: 'Menzel Abderrahmane', stateID: '7' },
+    { id: '1720', name: 'El Alia', stateID: '7' },
+    { id: '1721', name: 'Ras Jebel', stateID: '7' },
+    { id: '1722', name: 'Metline', stateID: '7' },
+    { id: '1723', name: 'Raf Raf', stateID: '7' },
+    { id: '2111', name: 'Béja', stateID: '8' },
+    { id: '2112', name: 'El Maâgoula', stateID: '8' },
+    { id: '2113', name: 'Zahret Medien', stateID: '8' },
+    { id: '2114', name: 'Nefza', stateID: '8' },
+    { id: '2115', name: 'Téboursouk', stateID: '8' },
+    { id: '2116', name: 'Testour', stateID: '8' },
+    { id: '2117', name: 'Goubellat', stateID: '8' },
+    { id: '2118', name: 'Majaz al Bab', stateID: '8' },
+    { id: '2211', name: 'Jendouba', stateID: '9' },
+    { id: '2212', name: 'Bou Salem', stateID: '9' },
+    { id: '2213', name: 'Tabarka', stateID: '9' },
+    { id: '2214', name: 'Aïn Draham', stateID: '9' },
+    { id: '2215', name: 'Fernana', stateID: '9' },
+    { id: '2216', name: "Beni M'Tir", stateID: '9' },
+    { id: '2217', name: 'Ghardimaou', stateID: '9' },
+    { id: '2218', name: 'Oued Melliz', stateID: '9' },
+    { id: '2311', name: 'El Kef', stateID: '10' },
+    { id: '2312', name: 'Nebeur', stateID: '10' },
+    { id: '2313', name: 'Touiref', stateID: '10' },
+    { id: '2314', name: 'Sakiet Sidi Youssef', stateID: '10' },
+    { id: '2315', name: 'Tajerouine', stateID: '10' },
+    { id: '2316', name: 'Menzel Salem', stateID: '10' },
+    { id: '2317', name: 'Kalaat es Senam', stateID: '10' },
+    { id: '2318', name: 'Kalâat Khasba', stateID: '10' },
+    { id: '2319', name: 'Jérissa', stateID: '10' },
+    { id: '2320', name: 'El Ksour', stateID: '10' },
+    { id: '2321', name: 'Dahmani', stateID: '10' },
+    { id: '2322', name: 'Sers', stateID: '10' },
+    { id: '2411', name: 'Siliana', stateID: '11' },
+    { id: '2412', name: 'Bou Arada', stateID: '11' },
+    { id: '2413', name: 'Gaâfour', stateID: '11' },
+    { id: '2414', name: 'El Krib', stateID: '11' },
+    { id: '2415', name: 'Sidi Bou Rouis', stateID: '11' },
+    { id: '2416', name: 'Maktar', stateID: '11' },
+    { id: '2417', name: 'Rouhia', stateID: '11' },
+    { id: '2418', name: 'Kesra', stateID: '11' },
+    { id: '2419', name: 'Bargou', stateID: '11' },
+    { id: '2420', name: 'El Aroussa', stateID: '11' },
+    { id: '3111', name: 'Sousse', stateID: '12' },
+    { id: '3112', name: 'Ksibet Thrayet', stateID: '12' },
+    { id: '3113', name: 'Ezzouhour', stateID: '12' },
+    { id: '3114', name: 'Zaouiet Sousse', stateID: '12' },
+    { id: '3115', name: 'Hammam Sousse', stateID: '12' },
+    { id: '3116', name: 'Akouda', stateID: '12' },
+    { id: '3117', name: 'Kalâa Kebira', stateID: '12' },
+    { id: '3118', name: 'Sidi Bou Ali', stateID: '12' },
+    { id: '3119', name: 'Hergla', stateID: '12' },
+    { id: '3120', name: 'Enfidha', stateID: '12' },
+    { id: '3121', name: 'Bouficha', stateID: '12' },
+    { id: '3122', name: 'Sidi El Hani', stateID: '12' },
+    { id: '3123', name: "M'saken", stateID: '12' },
+    { id: '3124', name: 'Kalâa Seghira', stateID: '12' },
+    { id: '3125', name: 'Messaadine', stateID: '12' },
+    { id: '3126', name: 'Kondar', stateID: '12' },
+    { id: '3211', name: 'Monastir', stateID: '13' },
+    { id: '3212', name: 'Khniss', stateID: '13' },
+    { id: '3213', name: 'Ouerdanin', stateID: '13' },
+    { id: '3214', name: 'Sahline Moôtmar', stateID: '13' },
+    { id: '3215', name: 'Sidi Ameur', stateID: '13' },
+    { id: '3216', name: 'Zéramdine', stateID: '13' },
+    { id: '3217', name: 'Beni Hassen', stateID: '13' },
+    { id: '3218', name: 'Ghenada', stateID: '13' },
+    { id: '3219', name: 'Jemmal', stateID: '13' },
+    { id: '3220', name: 'Menzel Kamel', stateID: '13' },
+    { id: '3221', name: 'Zaouiet Kontoch', stateID: '13' },
+    { id: '3222', name: 'Bembla-Mnara', stateID: '13' },
+    { id: '3223', name: 'Menzel Ennour', stateID: '13' },
+    { id: '3224', name: 'El Masdour', stateID: '13' },
+    { id: '3225', name: 'Moknine', stateID: '13' },
+    { id: '3226', name: 'Sidi Bennour', stateID: '13' },
+    { id: '3227', name: 'Menzel Farsi', stateID: '13' },
+    { id: '3228', name: 'Amiret El Fhoul', stateID: '13' },
+    { id: '3229', name: 'Amiret Touazra', stateID: '13' },
+    { id: '3230', name: 'Amiret El Hojjaj', stateID: '13' },
+    { id: '3231', name: 'Cherahil', stateID: '13' },
+    { id: '3232', name: 'Bekalta', stateID: '13' },
+    { id: '3233', name: 'Téboulba', stateID: '13' },
+    { id: '3234', name: 'Ksar Hellal', stateID: '13' },
+    { id: '3235', name: 'Ksibet El Mediouni', stateID: '13' },
+    { id: '3236', name: 'Benen Bodher', stateID: '13' },
+    { id: '3237', name: 'Touza', stateID: '13' },
+    { id: '3238', name: 'Sayada', stateID: '13' },
+    { id: '3239', name: 'Lemta', stateID: '13' },
+    { id: '3240', name: 'Bouhjar', stateID: '13' },
+    { id: '3241', name: 'Menzel Hayet', stateID: '13' },
+    { id: '3311', name: 'Mahdia', stateID: '14' },
+    { id: '3312', name: 'Rejiche', stateID: '14' },
+    { id: '3313', name: 'Bou Merdes', stateID: '14' },
+    { id: '3314', name: 'Ouled Chamekh', stateID: '14' },
+    { id: '3315', name: 'Chorbane', stateID: '14' },
+    { id: '3316', name: 'Hebira', stateID: '14' },
+    { id: '3317', name: 'Essouassi', stateID: '14' },
+    { id: '3318', name: 'El Djem', stateID: '14' },
+    { id: '3319', name: 'Kerker', stateID: '14' },
+    { id: '3320', name: 'Chebba', stateID: '14' },
+    { id: '3321', name: 'Melloulèche', stateID: '14' },
+    { id: '3322', name: 'Sidi Alouane', stateID: '14' },
+    { id: '3323', name: 'Ksour Essef', stateID: '14' },
+    { id: '3324', name: 'El Bradâa', stateID: '14' },
+    { id: '3411', name: 'Sfax', stateID: '15' },
+    { id: '3412', name: 'Sakiet Ezzit', stateID: '15' },
+    { id: '3413', name: 'Chihia', stateID: '15' },
+    { id: '3414', name: 'Sakiet Eddaïer', stateID: '15' },
+    { id: '3415', name: 'Gremda', stateID: '15' },
+    { id: '3416', name: 'El Ain', stateID: '15' },
+    { id: '3417', name: 'Thyna', stateID: '15' },
+    { id: '3418', name: 'Agareb', stateID: '15' },
+    { id: '3419', name: 'Jebiniana', stateID: '15' },
+    { id: '3420', name: 'El Hencha', stateID: '15' },
+    { id: '3421', name: 'Menzel Chaker', stateID: '15' },
+    { id: '3422', name: 'Ghraïba, Tunisia', stateID: '15' },
+    { id: '3423', name: 'Bir Ali Ben Khélifa', stateID: '15' },
+    { id: '3424', name: 'Skhira', stateID: '15' },
+    { id: '3425', name: 'Mahares', stateID: '15' },
+    { id: '3426', name: 'Kerkennah', stateID: '15' },
+    { id: '4111', name: 'Kairouan', stateID: '16' },
+    { id: '4112', name: 'Chebika', stateID: '16' },
+    { id: '4113', name: 'Sbikha', stateID: '16' },
+    { id: '4114', name: 'Oueslatia', stateID: '16' },
+    { id: '4115', name: 'Aïn Djeloula', stateID: '16' },
+    { id: '4116', name: 'Haffouz', stateID: '16' },
+    { id: '4117', name: 'Alaâ', stateID: '16' },
+    { id: '4118', name: 'Hajeb El Ayoun', stateID: '16' },
+    { id: '4119', name: 'Nasrallah', stateID: '16' },
+    { id: '4120', name: 'Menzel Mehiri', stateID: '16' },
+    { id: '4121', name: 'Echrarda', stateID: '16' },
+    { id: '4122', name: 'Bou Hajla', stateID: '16' },
+    { id: '4211', name: 'Kasserine', stateID: '17' },
+    { id: '4212', name: 'Sbeitla', stateID: '17' },
+    { id: '4213', name: 'Sbiba', stateID: '17' },
+    { id: '4214', name: 'Jedelienne', stateID: '17' },
+    { id: '4215', name: 'Thala', stateID: '17' },
+    { id: '4216', name: 'Haïdra', stateID: '17' },
+    { id: '4217', name: 'Foussana', stateID: '17' },
+    { id: '4218', name: 'Fériana', stateID: '17' },
+    { id: '4219', name: 'Thélepte', stateID: '17' },
+    { id: '4220', name: 'Magel Bel Abbès', stateID: '17' },
+    { id: '4311', name: 'Sidi Bouzid', stateID: '18' },
+    { id: '4312', name: 'Jilma', stateID: '18' },
+    { id: '4313', name: 'Cebalet', stateID: '18' },
+    { id: '4314', name: 'Bir El Hafey', stateID: '18' },
+    { id: '4315', name: 'Sidi Ali Ben Aoun', stateID: '18' },
+    { id: '4316', name: 'Menzel Bouzaiane', stateID: '18' },
+    { id: '4317', name: 'Meknassy', stateID: '18' },
+    { id: '4318', name: 'Mezzouna', stateID: '18' },
+    { id: '4319', name: 'Regueb', stateID: '18' },
+    { id: '4320', name: 'Ouled Haffouz', stateID: '18' },
+    { id: '5111', name: 'Gabès', stateID: '19' },
+    { id: '5112', name: 'Chenini Nahal', stateID: '19' },
+    { id: '5113', name: 'Ghannouch', stateID: '19' },
+    { id: '5114', name: 'Métouia', stateID: '19' },
+    { id: '5115', name: 'Oudhref', stateID: '19' },
+    { id: '5116', name: 'El Hamma', stateID: '19' },
+    { id: '5117', name: 'Matmata', stateID: '19' },
+    { id: '5118', name: 'Nouvelle Matmata', stateID: '19' },
+    { id: '5119', name: 'Mareth', stateID: '19' },
+    { id: '5120', name: 'Zarat', stateID: '19' },
+    { id: '5211', name: 'Medenine', stateID: '20' },
+    { id: '5212', name: 'Beni Khedache', stateID: '20' },
+    { id: '5213', name: 'Ben Gardane', stateID: '20' },
+    { id: '5214', name: 'Zarzis', stateID: '20' },
+    { id: '5215', name: 'Houmt El Souk (Djerba)', stateID: '20' },
+    { id: '5216', name: 'Midoun (Djerba)', stateID: '20' },
+    { id: '5217', name: 'Ajim (Djerba)', stateID: '20' },
+    { id: '5311', name: 'Tataouine', stateID: '21' },
+    { id: '5312', name: 'Bir Lahmar', stateID: '21' },
+    { id: '5313', name: 'Ghomrassen', stateID: '21' },
+    { id: '5314', name: 'Dehiba', stateID: '21' },
+    { id: '5315', name: 'Remada', stateID: '21' },
+    { id: '6111', name: 'Gafsa', stateID: '22' },
+    { id: '6112', name: 'El Ksar', stateID: '22' },
+    { id: '6113', name: 'Moularès', stateID: '22' },
+    { id: '6114', name: 'Redeyef', stateID: '22' },
+    { id: '6115', name: 'Métlaoui', stateID: '22' },
+    { id: '6116', name: 'Mdhila', stateID: '22' },
+    { id: '6117', name: 'El Guettar', stateID: '22' },
+    { id: '6118', name: 'Sened', stateID: '22' },
+    { id: '6211', name: 'Tozeur', stateID: '23' },
+    { id: '6212', name: 'Degache', stateID: '23' },
+    { id: '6213', name: 'Hamet Jerid', stateID: '23' },
+    { id: '6214', name: 'Nafta', stateID: '23' },
+    { id: '6215', name: 'Tamerza', stateID: '23' },
+    { id: '6311', name: 'Kebili', stateID: '24' },
+    { id: '6312', name: 'Djemna', stateID: '24' },
+    { id: '6313', name: 'Douz', stateID: '24' },
+    { id: '6314', name: 'El Golâa', stateID: '24' },
+    { id: '6315', name: 'Souk Lahad', stateID: '24' }
   ];
-  consumption: string = 'نحن في انتظار بيانات الاستمارة الخاصة بك';
-  gain: string = 'نحن في انتظار بيانات الاستمارة الخاصة بك';
-  use: string = 'نحن في انتظار بيانات الاستمارة الخاصة بك';
+  consumption: string = '';
+  gain: string = '';
+  use: string = '';
   phoneInputShow: boolean = false;
   emailInputShow: boolean = false;
   spinner: boolean = false;
+  done: boolean = false;
+  lang_selected: boolean = true;
+  locale: string = 'ar';
+  stateId: string = '';
+  countryId: string = '';
+  night_out:boolean=false
 
-  constructor(private service: DataPointService) {}
+  constructor(
+    private service: DataPointService,
+    public translate: TranslateService
+  ) {
+    translate.addLangs(['en', 'fr', 'ar']);
+    translate.setDefaultLang('ar');
+  }
 
   ngOnInit() {}
+
   onCheckboxChange(e: { source: { id: string }; checked: boolean }) {
     if (e.source.id === 'phone-checkbox') {
       this.phoneInputShow = e.checked;
@@ -364,48 +380,68 @@ export class UserComponent implements OnInit {
       );
       this.service.createDataPoint(dataPoint).subscribe(response => {
         this.spinner = false;
+        this.done = true;
         dpForm.reset();
         let today = new Date();
         let summerSatrt = new Date(`01/05/${today.getFullYear}`);
         let summerFinish = new Date(`30/09/${today.getFullYear}`);
-
-        if (today > summerSatrt && today < summerFinish) {
-          this.consumption = (
-            (JSON.parse(JSON.stringify(response)).billAmount / 365) *
-            1.5
-          )
-            .toFixed(2)
-            .toString();
-          this.use = `${(
-            ((JSON.parse(JSON.stringify(response)).billAmount / 365) * 1.5) /
-            0.21
-          )
-            .toFixed(2)
-            .toString()} kw/J`;
-        } else {
-          this.consumption = (
-            JSON.parse(JSON.stringify(response)).billAmount / 365
-          )
-            .toFixed(2)
-            .toString();
-          this.use = `${(
-            JSON.parse(JSON.stringify(response)).billAmount /
-            365 /
-            0.21
-          )
-            .toFixed(2)
-            .toString()} kw/J`;
-        }
-
+  
         if (JSON.parse(JSON.stringify(response)).energy !== 0.0) {
+          if (today > summerSatrt && today < summerFinish) {
+            this.consumption = (
+              (JSON.parse(JSON.stringify(response)).billAmount / 365) *
+              1.5
+            )
+              .toFixed(2)
+              .toString();
+            this.use = `${(
+              ((JSON.parse(JSON.stringify(response)).billAmount / 365) * 1.5) /
+              0.21
+            )
+              .toFixed(2)
+              .toString()} kw`;
+          } else {
+            this.consumption = (
+              JSON.parse(JSON.stringify(response)).billAmount / 365
+            )
+              .toFixed(2)
+              .toString();
+            this.use = `${(
+              JSON.parse(JSON.stringify(response)).billAmount /
+              365 /
+              0.21
+            )
+              .toFixed(2)
+              .toString()} kw`;
+          }
           this.gain = (JSON.parse(JSON.stringify(response)).energy * 0.21)
             .toFixed(2)
             .toString();
         } else {
-          this.gain =
-            'إنه الليل بالخارج ، لذا لا يمكننا تلبية طلبك في هذه اللحظة';
+          this.night_out=true
         }
       });
     }
+
   }
+
+  goBackHomePage() {
+    this.done = false;
+    this.night_out = false
+  }
+
+  switchLang(lang: string) {
+    this.lang_selected = false;
+    this.translate.use(lang);
+    this.locale = lang;
+  }
+
+  filterCitiesByStateId(id: string) {
+    return this.cities.filter(city => city.stateID === id);
+  }
+
+  filterStatesByCountryId(id: string) {
+    return this.states.filter(state => state.countryId === id);
+  }
+
 }
