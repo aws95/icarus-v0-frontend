@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataPointService } from '../services/data-point.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ConnectionService } from 'ng-connection-service';
 
 interface Country {
   name: string;
@@ -9,7 +10,7 @@ interface Country {
 interface State {
   name: string;
   id: string;
-  countryId:string
+  countryId: string;
 }
 interface City {
   name: string;
@@ -39,30 +40,30 @@ export class DataPoint {
 export class UserComponent implements OnInit {
   countries: Country[] = [{ name: 'Tunisie', id: '217' }];
   states: State[] = [
-    { id: '1', name: 'Tunis',countryId:"217" },
-    { id: '15', name: 'Sfax' ,countryId:"217"},
-    { id: '12', name: 'Sousse' ,countryId:"217"},
-    { id: '19', name: 'Gabes' ,countryId:"217"},
-    { id: '16', name: 'Kairouan',countryId:"217" },
-    { id: '7', name: 'Bizerte',countryId:"217" },
-    { id: '22', name: 'Gafsa' ,countryId:"217"},
-    { id: '5', name: 'Nabeul' ,countryId:"217"},
-    { id: '2', name: 'Ariana' ,countryId:"217"},
-    { id: '17', name: 'Kasserine' ,countryId:"217"},
-    { id: '13', name: 'Monastir',countryId:"217" },
-    { id: '21', name: 'Tataouine',countryId:"217" },
-    { id: '20', name: 'Medenine',countryId:"217" },
-    { id: '8', name: 'Beja' ,countryId:"217"},
-    { id: '9', name: 'Jendouba',countryId:"217" },
-    { id: '10', name: 'El Kef' ,countryId:"217"},
-    { id: '14', name: 'Mahdia' ,countryId:"217"},
-    { id: '18', name: 'Sidi Bouzid',countryId:"217" },
-    { id: '23', name: 'Tozeur',countryId:"217" },
-    { id: '11', name: 'Siliana' ,countryId:"217"},
-    { id: '24', name: 'Kebili',countryId:"217" },
-    { id: '6', name: 'Zaghouan',countryId:"217" },
-    { id: '3', name: 'Ben Arous' ,countryId:"217"},
-    { id: '4', name: 'Manouba' ,countryId:"217"}
+    { id: '1', name: 'Tunis', countryId: '217' },
+    { id: '15', name: 'Sfax', countryId: '217' },
+    { id: '12', name: 'Sousse', countryId: '217' },
+    { id: '19', name: 'Gabes', countryId: '217' },
+    { id: '16', name: 'Kairouan', countryId: '217' },
+    { id: '7', name: 'Bizerte', countryId: '217' },
+    { id: '22', name: 'Gafsa', countryId: '217' },
+    { id: '5', name: 'Nabeul', countryId: '217' },
+    { id: '2', name: 'Ariana', countryId: '217' },
+    { id: '17', name: 'Kasserine', countryId: '217' },
+    { id: '13', name: 'Monastir', countryId: '217' },
+    { id: '21', name: 'Tataouine', countryId: '217' },
+    { id: '20', name: 'Medenine', countryId: '217' },
+    { id: '8', name: 'Beja', countryId: '217' },
+    { id: '9', name: 'Jendouba', countryId: '217' },
+    { id: '10', name: 'El Kef', countryId: '217' },
+    { id: '14', name: 'Mahdia', countryId: '217' },
+    { id: '18', name: 'Sidi Bouzid', countryId: '217' },
+    { id: '23', name: 'Tozeur', countryId: '217' },
+    { id: '11', name: 'Siliana', countryId: '217' },
+    { id: '24', name: 'Kebili', countryId: '217' },
+    { id: '6', name: 'Zaghouan', countryId: '217' },
+    { id: '3', name: 'Ben Arous', countryId: '217' },
+    { id: '4', name: 'Manouba', countryId: '217' }
   ];
   cities: City[] = [
     { id: '1111', name: 'Tunis', stateID: '1' },
@@ -341,14 +342,24 @@ export class UserComponent implements OnInit {
   locale: string = 'ar';
   stateId: string = '';
   countryId: string = '';
-  night_out:boolean=false
-
+  night_out: boolean = false;
+  noInternet = false;
+  isConnected = true;
   constructor(
     private service: DataPointService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private connectionService: ConnectionService
   ) {
     translate.addLangs(['en', 'fr', 'ar']);
     translate.setDefaultLang('ar');
+    this.connectionService.monitor().subscribe(isConnected => {
+      this.isConnected = isConnected;
+      if (this.isConnected) {
+        this.noInternet = false;
+      } else {
+        this.noInternet = true;
+      }
+    });
   }
 
   ngOnInit() {}
@@ -385,7 +396,7 @@ export class UserComponent implements OnInit {
         let today = new Date();
         let summerSatrt = new Date(`01/05/${today.getFullYear}`);
         let summerFinish = new Date(`30/09/${today.getFullYear}`);
-  
+
         if (JSON.parse(JSON.stringify(response)).energy !== 0.0) {
           if (today > summerSatrt && today < summerFinish) {
             this.consumption = (
@@ -418,16 +429,15 @@ export class UserComponent implements OnInit {
             .toFixed(2)
             .toString();
         } else {
-          this.night_out=true
+          this.night_out = true;
         }
       });
     }
-
   }
 
   goBackHomePage() {
     this.done = false;
-    this.night_out = false
+    this.night_out = false;
   }
 
   switchLang(lang: string) {
@@ -443,5 +453,4 @@ export class UserComponent implements OnInit {
   filterStatesByCountryId(id: string) {
     return this.states.filter(state => state.countryId === id);
   }
-
 }

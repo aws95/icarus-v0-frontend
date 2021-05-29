@@ -12,7 +12,7 @@
     "RoofArea": "How much is the surface area of ​​your home would you reserve for solar panels? (In square meters)",
     "Area": "Area (In square meters)",
     "SendSms": "Would you like us to text you the solar stats report?",
-    "Phone": "Phone",
+    "Phone": "Phone (example 23555444)",
     "SendEmail": "Would you like us to email you the solar stats report?",
     "Yes?": "Yes",
     "Email": "Email",

@@ -12,7 +12,7 @@
     "RoofArea": "Quelle est la superficie de votre maison réserveriez-vous pour des panneaux solaires? (En mètres carrés)",
     "Area": "Superficie (en mètres carrés)",
     "SendSms": "Souhaitez-vous que nous vous envoyions le rapport des statistiques solaires par sms?",
-    "Phone": "Téléphone",
+    "Phone": "Téléphone (exemple 23555444)",
     "SendEmail": "Souhaitez-vous que nous vous envoyions le rapport sur les statistiques solaires par email?",
     "Yes?": "Oui",
     "Email": "Email",

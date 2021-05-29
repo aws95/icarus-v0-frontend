@@ -321,3 +321,15 @@ body {
   }
   
 }
+.wrapper{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height:310px;
+	margin-top:5rem;
+}
+h1{
+	text-align:center;
+	margin-top:4rem;
+	color:black;
+}
