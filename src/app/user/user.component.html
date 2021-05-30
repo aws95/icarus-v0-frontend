@@ -1,5 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
+    <!--Displayed if there is no internet connection-->
     <div *ngIf="noInternet" class="container">
       <div class="row">
         <div class="col">
@@ -11,7 +12,6 @@
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
-              
             >
               <g
                 id="Group-3"
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-
+    <!--Displayed whene there is internet connection-->
     <div *ngIf="!noInternet">
       <div *ngIf="lang_selected" class="overlay">
         <!--Spinner-->

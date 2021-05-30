@@ -1,19 +1,27 @@
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClient,HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { RouterModule } from "@angular/router";
-import { AppRoutingModule } from "./app.routing";
-import { AppComponent } from "./app.component";
-import { UserComponent } from "./user/user.component";
-import { InterceptorService } from "./services/interceptor.service";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app.routing';
+import { AppComponent } from './app.component';
+import { UserComponent } from './user/user.component';
+import { InterceptorService } from './services/interceptor.service';
 import { NgMaterialModule } from './ng-material.module';
 import { environment } from '../environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ComponentsModule } from "./components/components.module";
+import { ComponentsModule } from './components/components.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PwaService } from './services/pwa.service';
+import { PromptComponent } from './prompt/prompt.component';
+const initializer = (pwaService: PwaService) => () =>
+  pwaService.initPwaPrompt();
 
 @NgModule({
   imports: [
@@ -40,18 +48,19 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
       }
     })
   ],
-  declarations: [
-    AppComponent,
-    UserComponent,
-
-
-  ],
+  declarations: [AppComponent, UserComponent, PromptComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializer,
+      deps: [PwaService],
+      multi: true
+    }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
 
 // AOT compilation support
 export function httpTranslateLoader(http: HttpClient) {
