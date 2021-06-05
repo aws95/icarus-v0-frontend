@@ -23,5 +23,7 @@
     "Title5": "You consume in average per day of electricity",
     "Title6": "If you used solar energy, you would have earned Today",
     "BackHomePage": "Back to home page",
-    "NightOut":"It's night time outside,so we can't fullfil your request at this time ..."
+    "NightOut": "It's night time outside,so we can't fullfil your request at this time ...",
+    "No internet": "You are not connected to the internet",
+    "We can't serve your request at the moment...": "We can't serve your request at the moment..."
 }

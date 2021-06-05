@@ -1,0 +1,8 @@
+.my-footer {
+  z-index: 3;
+  background-color: #f39426;
+  left: 0;
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+}

@@ -338,13 +338,13 @@ export class UserComponent implements OnInit {
   emailInputShow: boolean = false;
   spinner: boolean = false;
   done: boolean = false;
-  lang_selected: boolean = false;
+  lang_selected: boolean = true;
   locale: string = 'ar';
   stateId: string = '';
   countryId: string = '';
   night_out: boolean = false;
   noInternetComponenet: boolean = false;
-  connetctedComponenet: boolean = true;
+  connectedComponenet: boolean = true;
   isConnected = true;
   constructor(
     private service: DataPointService,
@@ -356,7 +356,7 @@ export class UserComponent implements OnInit {
     this.connectionService.monitor().subscribe(isConnected => {
       this.isConnected = isConnected;
       if (this.isConnected) {
-        this.connetctedComponenet = true;
+        this.connectedComponenet = true;
         this.noInternetComponenet = false;
       }
     });
@@ -375,70 +375,70 @@ export class UserComponent implements OnInit {
 
   createDataPoint(dpForm: any) {
     if (this.isConnected) {
-      this.connetctedComponenet = true;
+      this.connectedComponenet = true;
       this.noInternetComponenet = false;
-      /*      if (dpForm.form.status === 'VALID') {
-      this.spinner = true;
-      let dataPoint = new DataPoint(
-        dpForm.form.value.area,
-        dpForm.form.value.bill1,
-        dpForm.form.value.bill2,
-        dpForm.form.value.bill3,
-        dpForm.form.value.bill4,
-        dpForm.form.value.city,
-        dpForm.form.value.country,
-        dpForm.form.value.state,
-        dpForm.form.value.phone,
-        dpForm.form.value.email,
-        dpForm.form.value.period
-      );
-      this.service.createDataPoint(dataPoint).subscribe(response => {
-        this.spinner = false;
-        this.done = true;
-        dpForm.reset();
-        let today = new Date();
-        let summerSatrt = new Date(`01/05/${today.getFullYear}`);
-        let summerFinish = new Date(`30/09/${today.getFullYear}`);
+      if (dpForm.form.status === 'VALID') {
+        this.spinner = true;
+        let dataPoint = new DataPoint(
+          dpForm.form.value.area,
+          dpForm.form.value.bill1,
+          dpForm.form.value.bill2,
+          dpForm.form.value.bill3,
+          dpForm.form.value.bill4,
+          dpForm.form.value.city,
+          dpForm.form.value.country,
+          dpForm.form.value.state,
+          dpForm.form.value.phone,
+          dpForm.form.value.email,
+          dpForm.form.value.period
+        );
+        this.service.createDataPoint(dataPoint).subscribe(response => {
+          this.spinner = false;
+          this.done = true;
+          dpForm.reset();
+          let today = new Date();
+          let summerSatrt = new Date(`01/05/${today.getFullYear}`);
+          let summerFinish = new Date(`30/09/${today.getFullYear}`);
 
-        if (JSON.parse(JSON.stringify(response)).energy !== 0.0) {
-          if (today > summerSatrt && today < summerFinish) {
-            this.consumption = (
-              (JSON.parse(JSON.stringify(response)).billAmount / 365) *
-              1.5
-            )
+          if (JSON.parse(JSON.stringify(response)).energy !== 0.0) {
+            if (today > summerSatrt && today < summerFinish) {
+              this.consumption = (
+                (JSON.parse(JSON.stringify(response)).billAmount / 365) *
+                1.5
+              )
+                .toFixed(2)
+                .toString();
+              this.use = `${(
+                ((JSON.parse(JSON.stringify(response)).billAmount / 365) *
+                  1.5) /
+                0.21
+              )
+                .toFixed(2)
+                .toString()} kw`;
+            } else {
+              this.consumption = (
+                JSON.parse(JSON.stringify(response)).billAmount / 365
+              )
+                .toFixed(2)
+                .toString();
+              this.use = `${(
+                JSON.parse(JSON.stringify(response)).billAmount /
+                365 /
+                0.21
+              )
+                .toFixed(2)
+                .toString()} kw`;
+            }
+            this.gain = (JSON.parse(JSON.stringify(response)).energy * 0.21)
               .toFixed(2)
               .toString();
-            this.use = `${(
-              ((JSON.parse(JSON.stringify(response)).billAmount / 365) *
-                1.5) /
-              0.21
-            )
-              .toFixed(2)
-              .toString()} kw`;
           } else {
-            this.consumption = (
-              JSON.parse(JSON.stringify(response)).billAmount / 365
-            )
-              .toFixed(2)
-              .toString();
-            this.use = `${(
-              JSON.parse(JSON.stringify(response)).billAmount /
-              365 /
-              0.21
-            )
-              .toFixed(2)
-              .toString()} kw`;
+            this.night_out = true;
           }
-          this.gain = (JSON.parse(JSON.stringify(response)).energy * 0.21)
-            .toFixed(2)
-            .toString();
-        } else {
-          this.night_out = true;
-        }
-      });
-    }*/
+        });
+      }
     } else {
-      this.connetctedComponenet = false;
+      this.connectedComponenet = false;
       this.noInternetComponenet = true;
     }
   }

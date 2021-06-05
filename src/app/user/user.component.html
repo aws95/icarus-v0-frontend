@@ -1,5 +1,5 @@
 <!--Displayed whene there is internet connection-->
-<div *ngIf="connetctedComponenet" class="main-content">
+<div *ngIf="connectedComponenet" class="main-content mb-5 pb-1">
   <div class="container-fluid">
     <div *ngIf="lang_selected" class="overlay">
       <!--Spinner-->
@@ -501,8 +501,8 @@
       <div class="row">
         <div class="col text-center">
           <h1>
-            No internet, <br />
-            We can't serve your request ...
+            {{ "No internet" | translate }}<br />
+            {{ "We can't serve your request at the moment..." | translate }}
           </h1>
         </div>
       </div>
