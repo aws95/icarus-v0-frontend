@@ -338,12 +338,13 @@ export class UserComponent implements OnInit {
   emailInputShow: boolean = false;
   spinner: boolean = false;
   done: boolean = false;
-  lang_selected: boolean = true;
+  lang_selected: boolean = false;
   locale: string = 'ar';
   stateId: string = '';
   countryId: string = '';
   night_out: boolean = false;
-  noInternet = false;
+  noInternetComponenet: boolean = false;
+  connetctedComponenet: boolean = true;
   isConnected = true;
   constructor(
     private service: DataPointService,
@@ -355,9 +356,8 @@ export class UserComponent implements OnInit {
     this.connectionService.monitor().subscribe(isConnected => {
       this.isConnected = isConnected;
       if (this.isConnected) {
-        this.noInternet = false;
-      } else {
-        this.noInternet = true;
+        this.connetctedComponenet = true;
+        this.noInternetComponenet = false;
       }
     });
   }
@@ -374,7 +374,10 @@ export class UserComponent implements OnInit {
   }
 
   createDataPoint(dpForm: any) {
-    if (dpForm.form.status === 'VALID') {
+    if (this.isConnected) {
+      this.connetctedComponenet = true;
+      this.noInternetComponenet = false;
+      /*      if (dpForm.form.status === 'VALID') {
       this.spinner = true;
       let dataPoint = new DataPoint(
         dpForm.form.value.area,
@@ -406,7 +409,8 @@ export class UserComponent implements OnInit {
               .toFixed(2)
               .toString();
             this.use = `${(
-              ((JSON.parse(JSON.stringify(response)).billAmount / 365) * 1.5) /
+              ((JSON.parse(JSON.stringify(response)).billAmount / 365) *
+                1.5) /
               0.21
             )
               .toFixed(2)
@@ -432,6 +436,10 @@ export class UserComponent implements OnInit {
           this.night_out = true;
         }
       });
+    }*/
+    } else {
+      this.connetctedComponenet = false;
+      this.noInternetComponenet = true;
     }
   }
 

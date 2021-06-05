@@ -1,7 +1,466 @@
-<div class="main-content">
+<!--Displayed whene there is internet connection-->
+<div *ngIf="connetctedComponenet" class="main-content">
   <div class="container-fluid">
-    <!--Displayed if there is no internet connection-->
-    <div *ngIf="noInternet" class="container">
+    <div *ngIf="lang_selected" class="overlay">
+      <!--Spinner-->
+      <div class="center">
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-4 col-md-4 col-sm-12">
+              <div class="example-button-container">
+                <div (click)="switchLang('ar')" class="language-selector">
+                  <img
+                    src="../../assets/icons/tn.png"
+                    alt=""
+                    width="60"
+                    height="60"
+                  />
+                </div>
+                <div class="text-white text-center">عربى</div>
+              </div>
+            </div>
+            <div class="col-4 col-md-4 col-sm-12">
+              <div class="example-button-container">
+                <div (click)="switchLang('fr')" class="language-selector">
+                  <img
+                    src="../../assets/icons/fr.png"
+                    alt=""
+                    width="60"
+                    height="60"
+                  />
+                </div>
+                <div class="text-white text-center">Français</div>
+              </div>
+            </div>
+            <div class="col-4 col-md-4 col-sm-12">
+              <div class="example-button-container">
+                <div (click)="switchLang('en')" class="language-selector">
+                  <img
+                    src="../../assets/icons/uk.png"
+                    alt=""
+                    width="60"
+                    height="60"
+                  />
+                </div>
+                <div class="text-white text-center">English</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Form-->
+    <div *ngIf="!done" class="row">
+      <div class="col-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="card-header card-header-warning text-center">
+            <h2 class="card-title">{{ "Title1" | translate }}</h2>
+            <p class="card-category ">
+              {{ "Title2" | translate }}
+            </p>
+          </div>
+          <div class="card-body">
+            <form #dpForm="ngForm" (ngSubmit)="createDataPoint(dpForm)">
+              <div
+                class="row"
+                [ngClass]="{ 'flex-row-reverse': locale === 'ar' }"
+              >
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">flag</i>
+                      </div>
+                      <p class="card-category">
+                        {{ "Country" | translate }}
+                      </p>
+                    </div>
+                    <div class="card-body ">
+                      <mat-form-field>
+                        <mat-select
+                          required
+                          [(ngModel)]="countryId"
+                          name="country"
+                          [ngClass]="{ 'text-end': locale === 'ar' }"
+                        >
+                          <mat-option
+                            [ngClass]="{ 'text-end': locale === 'ar' }"
+                            *ngFor="let country of countries"
+                            [value]="country.id"
+                          >
+                            {{ country.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">location_city</i>
+                      </div>
+                      <p class="card-category">{{ "State" | translate }}</p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field>
+                        <mat-select
+                          required
+                          [(ngModel)]="stateId"
+                          name="state"
+                          [ngClass]="{ 'text-end': locale === 'ar' }"
+                        >
+                          <mat-option
+                            [ngClass]="{ 'text-end': locale === 'ar' }"
+                            *ngFor="
+                              let state of filterStatesByCountryId(countryId)
+                            "
+                            [value]="state.id"
+                          >
+                            {{ state.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">location_on</i>
+                      </div>
+                      <p class="card-category">{{ "City" | translate }}</p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field>
+                        <mat-select
+                          [ngClass]="{ 'text-end': locale === 'ar' }"
+                          required
+                          ngModel="cityId"
+                          name="city"
+                        >
+                          <mat-option
+                            [ngClass]="{ 'text-end': locale === 'ar' }"
+                            *ngFor="let city of filterCitiesByStateId(stateId)"
+                            [value]="city.id"
+                          >
+                            {{ city.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row"
+                [ngClass]="{ 'd-flex flex-row-reverse ': locale === 'ar' }"
+              >
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">electrical_services</i>
+                      </div>
+                      <p class="card-category">
+                        {{ "Title3" | translate }}
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field
+                        [ngClass]="{ 'text-end': locale === 'ar' }"
+                      >
+                        <mat-label>{{ "Bill1" | translate }}</mat-label>
+                        <input required ngModel name="bill1" matInput />
+                      </mat-form-field>
+                      <mat-form-field
+                        [ngClass]="{ 'text-end': locale === 'ar' }"
+                      >
+                        <mat-label>{{ "Bill2" | translate }}</mat-label>
+                        <input required ngModel name="bill2" matInput />
+                      </mat-form-field>
+                      <mat-form-field
+                        [ngClass]="{ 'text-end': locale === 'ar' }"
+                      >
+                        <mat-label>{{ "Bill3" | translate }}</mat-label>
+                        <input required ngModel name="bill3" matInput />
+                      </mat-form-field>
+                      <mat-form-field
+                        [ngClass]="{ 'text-end': locale === 'ar' }"
+                      >
+                        <mat-label>{{ "Bill4" | translate }}</mat-label>
+                        <input required ngModel name="bill4" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">home</i>
+                      </div>
+                      <p class="card-category">
+                        {{ "RoofArea" | translate }}
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-form-field
+                        [ngClass]="{ 'text-end': locale === 'ar' }"
+                      >
+                        <mat-label>{{ "Area" | translate }}</mat-label>
+                        <input required ngModel name="area" matInput />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">textsms</i>
+                      </div>
+                      <p class="card-category">
+                        {{ "SendSms" | translate }}
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-checkbox
+                        id="phone-checkbox"
+                        (change)="onCheckboxChange($event)"
+                        >{{ "Yes?" | translate }}</mat-checkbox
+                      >
+                      <div *ngIf="phoneInputShow">
+                        <mat-form-field
+                          [ngClass]="{ 'text-end': locale === 'ar' }"
+                        >
+                          <mat-label>{{ "Phone" | translate }}</mat-label>
+                          <input required ngModel name="phone" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">alternate_email</i>
+                      </div>
+                      <p class="card-category">
+                        {{ "SendEmail" | translate }}
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <mat-checkbox
+                        id="email-checkbox"
+                        (change)="onCheckboxChange($event)"
+                        >{{ "Yes?" | translate }}</mat-checkbox
+                      >
+                      <div *ngIf="emailInputShow">
+                        <mat-form-field
+                          [ngClass]="{ 'text-end': locale === 'ar' }"
+                        >
+                          <mat-label>{{ "Email" | translate }}</mat-label>
+                          <input required ngModel name="email" matInput />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                mat-raised-button
+                type="submit"
+                class="btn btn-success"
+                [ngClass]="locale === 'ar' ? 'float-start' : 'float-end'"
+              >
+                {{ "Send" | translate }}
+              </button>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Spinner-->
+    <div *ngIf="spinner" class="row">
+      <div class="overlay">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="center">
+                <h1 class="text-center text-white">
+                  {{ "Patience" | translate }}
+                </h1>
+                <mat-spinner class="spinner-box" color="accent"></mat-spinner>
+                <h3 class="text-center text-white">
+                  {{ "Wait" | translate }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Report-->
+    <div *ngIf="done" class="row">
+      <div class="col-12 col-md-12 col-sm-12">
+        <div class="container">
+          <div class="card">
+            <div
+              class="card-header card-header-danger"
+              [ngClass]="{ 'text-end': locale === 'ar' }"
+            >
+              <h2 class="card-title">{{ "Title4" | translate }}</h2>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                      </div>
+                      <h1 class="card-title">{{ consumption }} DT</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div
+              class="card-header card-header-danger"
+              [ngClass]="{ 'text-end': locale === 'ar' }"
+            >
+              <h2 class="card-title">
+                {{ "Title5" | translate }}
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">electrical_services</i>
+                      </div>
+                      <h1 class="card-title">
+                        {{ use }}
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div
+              class="card-header card-header-success"
+              [ngClass]="{ 'text-end': locale === 'ar' }"
+            >
+              <h2 class="card-title">
+                {{ "Title6" | translate }}
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card card-stats">
+                    <div
+                      class="card-header card-header-warning card-header-icon"
+                    >
+                      <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                      </div>
+                      <h1 class="card-title">{{ gain }} DT</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            mat-raised-button
+            type="submit"
+            class="btn btn-success"
+            [ngClass]="locale === 'ar' ? 'float-start' : 'float-end'"
+            (click)="goBackHomePage()"
+          >
+            {{ "BackHomePage" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--Spinner-->
+    <div *ngIf="night_out" class="row">
+      <div class="overlay">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="center">
+                <h1 class="text-center text-white">
+                  {{ "NightOut" | translate }}
+                </h1>
+                <div id="wrapper">
+                  <div id="nightbg"></div>
+                  <div class="zzz1"></div>
+                  <div class="zzz2"></div>
+                  <div class="zzz3"></div>
+                  <div class="planet">
+                    <div class="face">
+                      <div class="eye">
+                        <div class="eye-in"></div>
+                      </div>
+                      <div class="mouth"></div>
+                      <div class="eye">
+                        <div class="eye-in"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="star pos-star1 "></div>
+                  <div class="star pos-star2 "></div>
+                  <div class="star pos-star3 "></div>
+                </div>
+                <button
+                  mat-raised-button
+                  type="submit"
+                  class="btn btn-secondary center"
+                  (click)="goBackHomePage()"
+                >
+                  {{ "BackHomePage" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Displayed if there is no internet connection-->
+<div *ngIf="noInternetComponenet" class="main-content">
+  <div class="container-fluid">
+    <div class="container">
       <div class="row">
         <div class="col">
           <div class="wrapper">
@@ -45,465 +504,6 @@
             No internet, <br />
             We can't serve your request ...
           </h1>
-        </div>
-      </div>
-    </div>
-    <!--Displayed whene there is internet connection-->
-    <div *ngIf="!noInternet">
-      <div *ngIf="lang_selected" class="overlay">
-        <!--Spinner-->
-        <div class="center">
-          <div class="container">
-            <div class="row text-center">
-              <div class="col-4 col-md-4 col-sm-12">
-                <div class="example-button-container">
-                  <div (click)="switchLang('ar')" class="language-selector">
-                    <img
-                      src="../../assets/icons/tn.png"
-                      alt=""
-                      width="60"
-                      height="60"
-                    />
-                  </div>
-                  <div class="text-white text-center">عربى</div>
-                </div>
-              </div>
-              <div class="col-4 col-md-4 col-sm-12">
-                <div class="example-button-container">
-                  <div (click)="switchLang('fr')" class="language-selector">
-                    <img
-                      src="../../assets/icons/fr.png"
-                      alt=""
-                      width="60"
-                      height="60"
-                    />
-                  </div>
-                  <div class="text-white text-center">Français</div>
-                </div>
-              </div>
-              <div class="col-4 col-md-4 col-sm-12">
-                <div class="example-button-container">
-                  <div (click)="switchLang('en')" class="language-selector">
-                    <img
-                      src="../../assets/icons/uk.png"
-                      alt=""
-                      width="60"
-                      height="60"
-                    />
-                  </div>
-                  <div class="text-white text-center">English</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Form-->
-      <div *ngIf="!done" class="row">
-        <div class="col-12 col-md-12 col-sm-12">
-          <div class="card">
-            <div class="card-header card-header-warning text-center">
-              <h2 class="card-title">{{ "Title1" | translate }}</h2>
-              <p class="card-category ">
-                {{ "Title2" | translate }}
-              </p>
-            </div>
-            <div class="card-body">
-              <form #dpForm="ngForm" (ngSubmit)="createDataPoint(dpForm)">
-                <div
-                  class="row"
-                  [ngClass]="{ 'flex-row-reverse': locale === 'ar' }"
-                >
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">flag</i>
-                        </div>
-                        <p class="card-category">
-                          {{ "Country" | translate }}
-                        </p>
-                      </div>
-                      <div class="card-body ">
-                        <mat-form-field>
-                          <mat-select
-                            required
-                            [(ngModel)]="countryId"
-                            name="country"
-                            [ngClass]="{ 'text-end': locale === 'ar' }"
-                          >
-                            <mat-option
-                              [ngClass]="{ 'text-end': locale === 'ar' }"
-                              *ngFor="let country of countries"
-                              [value]="country.id"
-                            >
-                              {{ country.name }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">location_city</i>
-                        </div>
-                        <p class="card-category">{{ "State" | translate }}</p>
-                      </div>
-                      <div class="card-body">
-                        <mat-form-field>
-                          <mat-select
-                            required
-                            [(ngModel)]="stateId"
-                            name="state"
-                            [ngClass]="{ 'text-end': locale === 'ar' }"
-                          >
-                            <mat-option
-                              [ngClass]="{ 'text-end': locale === 'ar' }"
-                              *ngFor="
-                                let state of filterStatesByCountryId(countryId)
-                              "
-                              [value]="state.id"
-                            >
-                              {{ state.name }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">location_on</i>
-                        </div>
-                        <p class="card-category">{{ "City" | translate }}</p>
-                      </div>
-                      <div class="card-body">
-                        <mat-form-field>
-                          <mat-select
-                            [ngClass]="{ 'text-end': locale === 'ar' }"
-                            required
-                            ngModel="cityId"
-                            name="city"
-                          >
-                            <mat-option
-                              [ngClass]="{ 'text-end': locale === 'ar' }"
-                              *ngFor="
-                                let city of filterCitiesByStateId(stateId)
-                              "
-                              [value]="city.id"
-                            >
-                              {{ city.name }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="row"
-                  [ngClass]="{ 'd-flex flex-row-reverse ': locale === 'ar' }"
-                >
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">electrical_services</i>
-                        </div>
-                        <p class="card-category">
-                          {{ "Title3" | translate }}
-                        </p>
-                      </div>
-                      <div class="card-body">
-                        <mat-form-field
-                          [ngClass]="{ 'text-end': locale === 'ar' }"
-                        >
-                          <mat-label>{{ "Bill1" | translate }}</mat-label>
-                          <input required ngModel name="bill1" matInput />
-                        </mat-form-field>
-                        <mat-form-field
-                          [ngClass]="{ 'text-end': locale === 'ar' }"
-                        >
-                          <mat-label>{{ "Bill2" | translate }}</mat-label>
-                          <input required ngModel name="bill2" matInput />
-                        </mat-form-field>
-                        <mat-form-field
-                          [ngClass]="{ 'text-end': locale === 'ar' }"
-                        >
-                          <mat-label>{{ "Bill3" | translate }}</mat-label>
-                          <input required ngModel name="bill3" matInput />
-                        </mat-form-field>
-                        <mat-form-field
-                          [ngClass]="{ 'text-end': locale === 'ar' }"
-                        >
-                          <mat-label>{{ "Bill4" | translate }}</mat-label>
-                          <input required ngModel name="bill4" matInput />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">home</i>
-                        </div>
-                        <p class="card-category">
-                          {{ "RoofArea" | translate }}
-                        </p>
-                      </div>
-                      <div class="card-body">
-                        <mat-form-field
-                          [ngClass]="{ 'text-end': locale === 'ar' }"
-                        >
-                          <mat-label>{{ "Area" | translate }}</mat-label>
-                          <input required ngModel name="area" matInput />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">textsms</i>
-                        </div>
-                        <p class="card-category">
-                          {{ "SendSms" | translate }}
-                        </p>
-                      </div>
-                      <div class="card-body">
-                        <mat-checkbox
-                          id="phone-checkbox"
-                          (change)="onCheckboxChange($event)"
-                          >{{ "Yes?" | translate }}</mat-checkbox
-                        >
-                        <div *ngIf="phoneInputShow">
-                          <mat-form-field
-                            [ngClass]="{ 'text-end': locale === 'ar' }"
-                          >
-                            <mat-label>{{ "Phone" | translate }}</mat-label>
-                            <input required ngModel name="phone" matInput />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">alternate_email</i>
-                        </div>
-                        <p class="card-category">
-                          {{ "SendEmail" | translate }}
-                        </p>
-                      </div>
-                      <div class="card-body">
-                        <mat-checkbox
-                          id="email-checkbox"
-                          (change)="onCheckboxChange($event)"
-                          >{{ "Yes?" | translate }}</mat-checkbox
-                        >
-                        <div *ngIf="emailInputShow">
-                          <mat-form-field
-                            [ngClass]="{ 'text-end': locale === 'ar' }"
-                          >
-                            <mat-label>{{ "Email" | translate }}</mat-label>
-                            <input required ngModel name="email" matInput />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  mat-raised-button
-                  type="submit"
-                  class="btn btn-success"
-                  [ngClass]="locale === 'ar' ? 'float-start' : 'float-end'"
-                >
-                  {{ "Send" | translate }}
-                </button>
-                <div class="clearfix"></div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Spinner-->
-      <div *ngIf="spinner" class="row">
-        <div class="overlay">
-          <div class="container">
-            <div class="row">
-              <div class="col">
-                <div class="center">
-                  <h1 class="text-center text-white">
-                    {{ "Patience" | translate }}
-                  </h1>
-                  <mat-spinner class="spinner-box" color="accent"></mat-spinner>
-                  <h3 class="text-center text-white">
-                    {{ "Wait" | translate }}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Report-->
-      <div *ngIf="done" class="row">
-        <div class="col-12 col-md-12 col-sm-12">
-          <div class="container">
-            <div class="card">
-              <div
-                class="card-header card-header-danger"
-                [ngClass]="{ 'text-end': locale === 'ar' }"
-              >
-                <h2 class="card-title">{{ "Title4" | translate }}</h2>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">attach_money</i>
-                        </div>
-                        <h1 class="card-title">{{ consumption }} DT</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div
-                class="card-header card-header-danger"
-                [ngClass]="{ 'text-end': locale === 'ar' }"
-              >
-                <h2 class="card-title">
-                  {{ "Title5" | translate }}
-                </h2>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">electrical_services</i>
-                        </div>
-                        <h1 class="card-title">
-                          {{ use }}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div
-                class="card-header card-header-success"
-                [ngClass]="{ 'text-end': locale === 'ar' }"
-              >
-                <h2 class="card-title">
-                  {{ "Title6" | translate }}
-                </h2>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card card-stats">
-                      <div
-                        class="card-header card-header-warning card-header-icon"
-                      >
-                        <div class="card-icon">
-                          <i class="material-icons">attach_money</i>
-                        </div>
-                        <h1 class="card-title">{{ gain }} DT</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button
-              mat-raised-button
-              type="submit"
-              class="btn btn-success"
-              [ngClass]="locale === 'ar' ? 'float-start' : 'float-end'"
-              (click)="goBackHomePage()"
-            >
-              {{ "BackHomePage" | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
-      <!--Spinner-->
-      <div *ngIf="night_out" class="row">
-        <div class="overlay">
-          <div class="container">
-            <div class="row">
-              <div class="col">
-                <div class="center">
-                  <h1 class="text-center text-white">
-                    {{ "NightOut" | translate }}
-                  </h1>
-                  <div id="wrapper">
-                    <div id="nightbg"></div>
-                    <div class="zzz1"></div>
-                    <div class="zzz2"></div>
-                    <div class="zzz3"></div>
-                    <div class="planet">
-                      <div class="face">
-                        <div class="eye">
-                          <div class="eye-in"></div>
-                        </div>
-                        <div class="mouth"></div>
-                        <div class="eye">
-                          <div class="eye-in"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="star pos-star1 "></div>
-                    <div class="star pos-star2 "></div>
-                    <div class="star pos-star3 "></div>
-                  </div>
-                  <button
-                    mat-raised-button
-                    type="submit"
-                    class="btn btn-secondary center"
-                    (click)="goBackHomePage()"
-                  >
-                    {{ "BackHomePage" | translate }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
