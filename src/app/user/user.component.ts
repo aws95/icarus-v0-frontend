@@ -433,6 +433,7 @@ export class UserComponent implements OnInit {
               .toFixed(2)
               .toString();
           } else {
+            this.done = false;
             this.night_out = true;
           }
         });
