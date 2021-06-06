@@ -1,3 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Icarus Project</span>
+    <span class="example-spacer"></span>
+    <button mat-raised-button color="accent" (click)="addToHomeScreen()">
+      You want to add the app to your home screen?
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <!--Displayed whene there is internet connection-->
 <div *ngIf="connectedComponenet" class="main-content mb-5 pb-1">
   <div class="container-fluid">
@@ -509,3 +519,4 @@
     </div>
   </div>
 </div>
+

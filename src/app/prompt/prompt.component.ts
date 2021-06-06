@@ -27,4 +27,5 @@ export class PromptComponent implements OnInit {
   public close() {
     this.bottomSheetRef.dismiss();
   }
+  
 }

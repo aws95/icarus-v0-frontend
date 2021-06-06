@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { DataPointService } from '../services/data-point.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from 'ng-connection-service';
@@ -29,7 +29,8 @@ export class DataPoint {
     public stateId: string,
     public phone?: string,
     public email?: string,
-    public period?: number
+    public period?: number,
+    public lang?: string
   ) {}
 }
 @Component({
@@ -346,6 +347,19 @@ export class UserComponent implements OnInit {
   noInternetComponenet: boolean = false;
   connectedComponenet: boolean = true;
   isConnected = true;
+  deferredPrompt: any;
+  showButton = false;
+
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onbeforeinstallprompt(e: { preventDefault: () => void; }) {
+    console.log(e);
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    this.deferredPrompt = e;
+    this.showButton = true;
+  }
+
   constructor(
     private service: DataPointService,
     public translate: TranslateService,
@@ -390,7 +404,8 @@ export class UserComponent implements OnInit {
           dpForm.form.value.state,
           dpForm.form.value.phone,
           dpForm.form.value.email,
-          dpForm.form.value.period
+          dpForm.form.value.period,
+          this.locale
         );
         this.service.createDataPoint(dataPoint).subscribe(response => {
           this.spinner = false;
@@ -461,5 +476,21 @@ export class UserComponent implements OnInit {
 
   filterStatesByCountryId(id: string) {
     return this.states.filter(state => state.countryId === id);
+  }
+
+  addToHomeScreen() {
+    // hide our user interface that shows our A2HS button
+    this.showButton = false;
+    // Show the prompt
+    this.deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    this.deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
+      } else {
+        console.log('User dismissed the A2HS prompt');
+      }
+      this.deferredPrompt = null;
+    });
   }
 }
