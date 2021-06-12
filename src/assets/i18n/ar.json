@@ -25,5 +25,6 @@
     "BackHomePage": "عد إلى الصفحة الرئيسية",
     "NightOut":"إنه الليل بالخارج ، لذا لا يمكننا تلبية طلبك في هذه اللحظة",
     "No internet" :"أنت غير متصل بالإنترنت",
-    "We can't serve your request at the moment...":"لا يمكننا تلبية طلبك في هذه اللحظة"
+    "We can't serve your request at the moment...":"لا يمكننا تلبية طلبك في هذه اللحظة",
+    "check-form":"يرجى ملء جميع المعطيات المطلوبة"
 }

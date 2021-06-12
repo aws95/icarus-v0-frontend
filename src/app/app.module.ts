@@ -18,10 +18,7 @@ import { ComponentsModule } from './components/components.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { PwaService } from './services/pwa.service';
 import { PromptComponent } from './prompt/prompt.component';
-const initializer = (pwaService: PwaService) => () =>
-  pwaService.initPwaPrompt();
 
 @NgModule({
   imports: [
@@ -50,13 +47,7 @@ const initializer = (pwaService: PwaService) => () =>
   ],
   declarations: [AppComponent, UserComponent, PromptComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializer,
-      deps: [PwaService],
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -25,5 +25,6 @@
     "BackHomePage": "Back to home page",
     "NightOut": "It's night time outside,so we can't fullfil your request at this time ...",
     "No internet": "You are not connected to the internet",
-    "We can't serve your request at the moment...": "We can't serve your request at the moment..."
+    "We can't serve your request at the moment...": "We can't serve your request at the moment...",
+    "check-form":"Please fill in all the required inputs"
 }

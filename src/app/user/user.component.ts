@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { DataPointService } from '../services/data-point.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ConnectionService } from 'ng-connection-service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface Country {
   name: string;
@@ -343,12 +344,14 @@ export class UserComponent implements OnInit {
   locale: string = 'ar';
   stateId: string = '';
   countryId: string = '';
+  cityId: string = '';
   night_out: boolean = false;
   noInternetComponenet: boolean = false;
   connectedComponenet: boolean = true;
   isConnected = true;
   deferredPrompt: any;
   showButton = false;
+  formIsNotValid: boolean = false;
 
   constructor(
     private service: DataPointService,
@@ -383,6 +386,7 @@ export class UserComponent implements OnInit {
       this.noInternetComponenet = false;
       if (dpForm.form.status === 'VALID') {
         this.spinner = true;
+        this.formIsNotValid = false;
         let dataPoint = new DataPoint(
           dpForm.form.value.area,
           dpForm.form.value.bill1,
@@ -400,7 +404,6 @@ export class UserComponent implements OnInit {
         this.service.createDataPoint(dataPoint).subscribe(response => {
           this.spinner = false;
           this.done = true;
-          dpForm.reset();
           let today = new Date();
           let summerSatrt = new Date(`01/05/${today.getFullYear}`);
           let summerFinish = new Date(`30/09/${today.getFullYear}`);
@@ -442,6 +445,8 @@ export class UserComponent implements OnInit {
             this.night_out = true;
           }
         });
+      } else {
+        this.formIsNotValid = true;
       }
     } else {
       this.connectedComponenet = false;
@@ -466,5 +471,9 @@ export class UserComponent implements OnInit {
 
   filterStatesByCountryId(id: string) {
     return this.states.filter(state => state.countryId === id);
+  }
+
+  onChangeEvent() {
+    this.formIsNotValid = false;
   }
 }
