@@ -414,7 +414,7 @@
                     <div class="card-body">
                       <mat-checkbox
                         id="phone-checkbox"
-                        (change)="onChangeEvent()"
+                        (change)="onCheckboxChange($event)"
                         >{{ "Yes?" | translate }}
                       </mat-checkbox>
                       <div *ngIf="phoneInputShow">
@@ -441,7 +441,7 @@
                     <div class="card-body">
                       <mat-checkbox
                         id="email-checkbox"
-                        (change)="onChangeEvent()"
+                        (change)="onCheckboxChange($event)"
                         >{{ "Yes?" | translate }}
                       </mat-checkbox>
                       <div *ngIf="emailInputShow">
